@@ -2,7 +2,7 @@
  * LinkedList.h
  *
  *  Created on: 21 jun. 2022
- *      Author: UGIO
+ *      Author: Monsalbo Lucio
  */
 
 #ifndef LINKEDLIST_H_
@@ -60,6 +60,10 @@ LinkedList* ll_subList(LinkedList* this,int from,int to);
 LinkedList* ll_clone(LinkedList* this);
 
 int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order);
+
+LinkedList* ll_map(LinkedList* this,void*(pFuncion)(void*));
+
+LinkedList* ll_filter (LinkedList* this, int (*pFunc) (void* element));
 
 
 

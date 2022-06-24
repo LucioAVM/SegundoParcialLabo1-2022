@@ -25,6 +25,9 @@ descripción de manera ascendente.
 #include <stdio.h>
 #include <stdlib.h>
 #include "Menu.h"
+#include "Servicios.h"
+#include "Parcer.h"
+
 
 int main(void)
 {
@@ -33,35 +36,56 @@ int main(void)
 	int menu;
 	int banderaArchivos;
 
-	LinkedList listaServicios;
+	menu = 0;
 
-	menu = getMenu;
+	LinkedList* listaServicios = ll_newLinkedList();
 
-	switch(menu)
+	do
 	{
-	case 1:
-		archivo_servicios(listaServicios, &banderaArchivos);
-		break;
-	case 2:
+		if(menu != 0 &&( menu > 7 || menu < 0))
+		{
+			printf("ingrese una opcion valida/n");
+		}
 
-		break;
-	case 3:
+		menu = getMenu();
 
-		break;
-	case 4:
+			switch(menu)
+			{
+			case 1:
+				archivo_servicios(listaServicios, &banderaArchivos);
+				break;
 
-		break;
-	case 5:
 
-		break;
-	case 6:
+			case 2:
+				listarServicios(listaServicios);// validar carga de archivos
+				break;
 
-		break;
-	case 7:
 
-		break;
-	}
+			case 3:
+				listarServicios(listaServicios);
+				break;
 
+
+			case 4:
+				ordenar_tipo(listaServicios);
+				break;
+
+
+			case 5:
+				mostrarServiciosAsendente(listaServicios);
+				break;
+
+
+			case 6:
+				guardarArchivo(listaServicios);
+				break;
+
+
+			case 7:
+
+				break;
+			}
+	}while(menu != 7);
 
 	return EXIT_SUCCESS;
 }

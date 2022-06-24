@@ -2,12 +2,13 @@
  * LinkedList.c
  *
  *  Created on: 21 jun. 2022
- *      Author: UGIO
+ *      Author: Monsalbo Lucio
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "LinkedList.h"
+#include "Servicios.h"
 
 static Node* getNode(LinkedList* this, int nodeIndex);
 static int addNode(LinkedList* this, int nodeIndex,void* pElement);
@@ -160,6 +161,7 @@ int ll_add(LinkedList* this, void* pElement)
 	int tamNode;
 
 	retornoAux = -1;
+
 	tamNode = ll_len(this);
 
 	if(this!=NULL)
@@ -575,20 +577,24 @@ LinkedList* ll_clone(LinkedList* this)
 
 int ll_sort(LinkedList* this, int (pFunc)(void* ,void*), int order)
 {
-	int retorno =-1;
+	int retorno = -1;
+
 	void* pElement1;
 	void* pElement2;
 	void* aux;
+
 	int verificacion;
+
 	int i;
 	int j;
+
 	int len;
 
 	if(this != NULL && pFunc != NULL && order >= 0 && order <= 1)
 	{
 		len = ll_len(this);
 
-		for(i=0; i<len-1; i++)
+		for(i = 0; i < len-1 ; i++)
 		{
 			for(j=i+1; j<len; j++)
 			{
@@ -618,8 +624,77 @@ int ll_sort(LinkedList* this, int (pFunc)(void* ,void*), int order)
 				}
 			}
 		}
-		retorno=0;
+		retorno = 0;
 	}
 	return retorno;
 }
 
+/**
+ * @brief calcula el total del servicio
+ *
+ * @param this
+ * @param pFuncion
+ * @return LL con totales de servicios ya cargados
+ */
+LinkedList* ll_map(LinkedList* this,void*(pFuncion)(void*))
+{
+	eServicio* servicio = NULL;
+
+	int retorno;
+	int contador;
+	int validacion;
+
+	retorno = -1;
+	contador = 0;
+
+	if(this != NULL)
+	{
+		do
+		{
+			servicio =(eServicio*) ll_get( this, contador);
+
+			validacion = ll_set(this, contador,(eServicio*) servicio);
+
+			if(validacion != 0)
+			{
+				printf("ocurrio un error al modificar el siguiente servicio:");
+				mostrarUnServicio(this, contador);
+			}
+			contador ++;
+		}while(contador <= this->size);
+		retorno = 0;
+	}
+	return retorno;
+}
+
+/**
+ * @brief itera todos los elementos del array y los filtra por pFunc
+ *
+ * @param this
+ * @param pFunc
+ * @return 1 = Item valido  0 = item invalido
+ */
+LinkedList* ll_filter (LinkedList* this, int (*pFunc) (void* element))
+{
+	LinkedList* listaFiltradaPorTipo = ll_newLinkedList();
+	eServicio* servicio;
+
+	int tam;
+	int i;
+
+	tam = ll_len(this);
+
+	for(i = 0 ; i <= tam ; i++)
+	{
+		servicio = (eServicio*) ll_get(this, i);
+
+		if(pFunc(servicio) == 1)
+		{
+			ll_add(listaFiltradaPorTipo, servicio);
+		}
+	}
+
+
+
+	return listaFiltradaPorTipo;
+}
