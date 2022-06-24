@@ -12,6 +12,9 @@
 #include "Parcer.h"
 #include "LinkedList.h"
 
+/******************************************************************************************************
+										Menu
+ ******************************************************************************************************/
 int getMenu(void)
 {
 	int menu;
@@ -44,25 +47,32 @@ int getMenu(void)
 	return menu;
 }
 
+/******************************************************************************************************
+										Opcion 1
+ ******************************************************************************************************/
 void archivo_servicios(LinkedList* listaServicios,int* bandera)//hacer una validacion para cuando cargue un archivo por segunda ves
 {
 	char path[20];
 	int validacionCarga;
 
-	printf("ingrese el nombre del archivo que desea cargar\n");
-	fflush(stdout);
-	scanf("%s", path);
-
-	validacionCarga = cargaDeArchivo(path, listaServicios);
-
-	if(validacionCarga == 0)
+	if(listaServicios != NULL && bandera != NULL)
 	{
-		*bandera = 1;
+		printf("ingrese el nombre del archivo que desea cargar\n");
+		fflush(stdout);
+		scanf("%s", path);
+
+		validacionCarga = cargaDeArchivo(path, listaServicios);//=> abajo
+
+		if(validacionCarga == 0)
+		{
+			*bandera = 1;
+		}else{
+			printf("error al intentar cargar archivo, intente nuevamente\n");
+		}
 	}else{
-		printf("error al intentar cargar archivo, intente unevamente\n");
+		printf("ERROR, al intentar iniciar la LinkedList\n");
 	}
 }
-
 
 int cargaDeArchivo(char* path, LinkedList* listaServicios)
 {
@@ -72,42 +82,90 @@ int cargaDeArchivo(char* path, LinkedList* listaServicios)
 
 	retorno = -1;
 
-	pArchivo = fopen(path,"r");
-
-	if(pArchivo == NULL)
+	if(listaServicios != NULL && path != NULL)
 	{
-		printf("error");
-	}else{
-		parser_PasajeroDesdeTexto(pArchivo, listaServicios);
-		retorno = 0;
-	}
-	fclose(pArchivo);
+		pArchivo = fopen(path,"r");
 
+		if(pArchivo == NULL)
+		{
+			printf("error");
+		}else{
+			parser_PasajeroDesdeTexto(pArchivo, listaServicios);//=>parser.c
+			retorno = 0;
+		}
+		fclose(pArchivo);
+	}
 	return retorno;
 }
 
+/******************************************************************************************************
+										Opcion 2
+ ******************************************************************************************************/
 void listarServicios(LinkedList* listaServicios)
 {
 	int i;
 	int tam;
 
-	tam = ll_len(listaServicios);
-	//primer printf con plantilla
-	printf("Listado de Servicios:\n"
+	if(listaServicios != NULL)
+	{
+		tam = ll_len(listaServicios);
+
+		printf("Listado de Servicios:\n"
 				"ID-------Descripcion-------Tipo-------Precio Unitario-------Cantidad-------Total\n");
 
-	if(tam > 0)
-	{
-		for(i = 0 ; i < tam ; i++)
+		if(tam > 0)
 		{
-			if(!mostrarUnServicio(listaServicios, i))
+			for(i = 0 ; i < tam ; i++)
 			{
-				printf("error al cargar el servicio en la pocision N° %d\n", i);
+				if(!mostrarUnServicio(listaServicios, i))
+				{
+					printf("error al cargar el servicio en la pocision N° %d\n", i);
+				}
+			}
+		}
+	}else{
+		printf("ERROR, al intentar iniciar la LinkedList\n");
+	}
+}
+
+/******************************************************************************************************
+										Opcion 3
+ ******************************************************************************************************/
+void eServicio_Totales(LinkedList* listaServicios)
+{
+	LinkedList* listaConTotales = NULL;
+
+	int i;
+	int tam;
+
+	void*(*pFuncion)(void*);
+
+	if(listaServicios != NULL)
+	{
+		pFuncion = asignarTotales;
+
+		listaConTotales = ll_map(listaServicios,pFuncion);
+
+		if(listaConTotales != NULL)
+		{
+			printf("se cargo con exito la siguiente lista:\n");
+
+			printf("Listado de Servicios:\n"
+					"ID-------Descripcion-------Tipo-------Precio Unitario-------Cantidad-------Total\n");
+
+			tam = ll_len(listaConTotales);
+
+			for(i = 0 ; i < tam ; i++)
+			{
+				mostrarUnServicio(listaConTotales,i);
 			}
 		}
 	}
 }
 
+/******************************************************************************************************
+										Opcion 4
+ ******************************************************************************************************/
 void ordenar_tipo(LinkedList* listaServicios)
 {
 	int submenu;
@@ -187,23 +245,31 @@ void ordenar_tipo(LinkedList* listaServicios)
 	}
 }
 
+/******************************************************************************************************
+										Opcion 5
+ ******************************************************************************************************/
 void mostrarServiciosAsendente(LinkedList* listaServicios)
 {
 	int validacion;
 
 	int (*pfuncion)(void*,void*);
 
-	pfuncion = ordenarServicio;
-
-	validacion = ll_sort(listaServicios,pfuncion, 1);
-
-	if(validacion == -1)
+	if(listaServicios != NULL)
 	{
-		printf("ERROR, Lista de servicios no encontrada");//el puntero de la lista es NULL
+		pfuncion = ordenarServicio;
+
+		validacion = ll_sort(listaServicios,pfuncion, 1);
+
+		if(validacion == -1)
+		{
+			printf("ERROR, Lista de servicios no encontrada");//el puntero de la lista es NULL
+		}
 	}
 }
 
-
+/******************************************************************************************************
+										Opcion 6
+ ******************************************************************************************************/
 void guardarArchivo(LinkedList* listaServicios)
 {
 	FILE* pArchivoTexto;

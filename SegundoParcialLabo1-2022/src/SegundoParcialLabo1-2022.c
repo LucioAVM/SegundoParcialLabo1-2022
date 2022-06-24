@@ -62,7 +62,7 @@ int main(void)
 
 
 			case 3:
-				listarServicios(listaServicios);
+				eServicio_Totales(listaServicios);
 				break;
 
 
@@ -82,7 +82,13 @@ int main(void)
 
 
 			case 7:
-
+				printf( "\n           GRACIAS POR UTILIZAR ESTE PROGRAMA\n"
+						"             PRODUCIDO POR Monsalbo lucio\n"
+						"              EDITADO POR Lucio Monsalbo\n"
+						"         BUILDEADO POR Alejandro Lucio Monsalbo\n"
+						"        TESTEADO POR Valerio Alejandro Monsalbo\n"
+						"        ENVIADO POR Monsalbo Lucio Alejandro Valerio\n"
+						"   AGRADECIMIENTO ESPECIAL A Lucio Alejandro Valerio Monsalbo\n");
 				break;
 			}
 	}while(menu != 7);

@@ -50,7 +50,7 @@ eServicio* eServicio_newParametros(char id_servicioStr[], char descripcion[], ch
 
         if(pServicio != NULL)
         {
-        	printf("%s ANTES \n",id_servicioStr);
+        	//printf("%s ANTES \n",id_servicioStr);
 
         	id_servicio    = atoi(id_servicioStr);
         	tipo           = atoi(tipoStr);
@@ -58,7 +58,7 @@ eServicio* eServicio_newParametros(char id_servicioStr[], char descripcion[], ch
         	cantidad       = atoi(cantidadStr);
         	totalServicio  = atoi(totalServicioStr);
 
-        	printf("%d DESPUES\n",id_servicio);
+        	//printf("%d DESPUES\n",id_servicio);
 
             eServicio_setId(pServicio,id_servicio);
             eServicio_setDescripcion(pServicio,descripcion);
@@ -286,6 +286,9 @@ int eServicio_getTotalServicio(eServicio* this, float* totalServicio)
     return retorno;
 }
 
+/******************************************************************************************************
+									   Validacion Gets
+ ******************************************************************************************************/
 int validacion_gets(eServicio* servicio, int* id_servicio, char descripcion[], char* tipo, float* precioUnitario, int* cantidad, float* totalServicio)
 {
 	int retorno;
@@ -308,7 +311,9 @@ int validacion_gets(eServicio* servicio, int* id_servicio, char descripcion[], c
 	return retorno;
 }
 
-
+/******************************************************************************************************
+										Opcion 3
+ ******************************************************************************************************/
 void* asignarTotales(void* pElement)
 {
 	int cantidad;
@@ -329,6 +334,9 @@ void* asignarTotales(void* pElement)
 	return servicio;
 }
 
+/******************************************************************************************************
+										Mostrar
+ ******************************************************************************************************/
 int mostrarUnServicio(LinkedList* listaServicios, int index)
 {
 	eServicio* servicio = NULL;
@@ -355,6 +363,9 @@ int mostrarUnServicio(LinkedList* listaServicios, int index)
 	return retorno;
 }
 
+/******************************************************************************************************
+										Opcion 5
+ ******************************************************************************************************/
 int ordenarServicio(void* pElement1, void* pElement2)
 {
 	int retorno;//1 o -1
@@ -372,6 +383,9 @@ int ordenarServicio(void* pElement1, void* pElement2)
 	return retorno;
 }
 
+/******************************************************************************************************
+										Opcion 4
+ ******************************************************************************************************/
 int filtrarTipo_Minorista(void* element)
 {
 	int retorno;
@@ -387,6 +401,7 @@ int filtrarTipo_Minorista(void* element)
 
 	return retorno;
 }
+
 
 int filtrarTipo_Mayorista(void* element)
 {
@@ -420,5 +435,5 @@ int filtrarTipo_Exportar(void* element)
 	return retorno;
 }
 /******************************************************************************************************
-											Estado
+											fin
  ******************************************************************************************************/

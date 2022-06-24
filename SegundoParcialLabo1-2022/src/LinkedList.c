@@ -638,13 +638,14 @@ int ll_sort(LinkedList* this, int (pFunc)(void* ,void*), int order)
  */
 LinkedList* ll_map(LinkedList* this,void*(pFuncion)(void*))
 {
-	eServicio* servicio = NULL;
+	LinkedList* listaConTotales = ll_newLinkedList();
 
-	int retorno;
+	eServicio* servicio = NULL;
+	eServicio* auxiliarServicio = NULL;
+
 	int contador;
 	int validacion;
 
-	retorno = -1;
 	contador = 0;
 
 	if(this != NULL)
@@ -653,7 +654,9 @@ LinkedList* ll_map(LinkedList* this,void*(pFuncion)(void*))
 		{
 			servicio =(eServicio*) ll_get( this, contador);
 
-			validacion = ll_set(this, contador,(eServicio*) servicio);
+			auxiliarServicio  = pFuncion(servicio);
+
+			validacion = ll_add(listaConTotales, auxiliarServicio);
 
 			if(validacion != 0)
 			{
@@ -662,9 +665,8 @@ LinkedList* ll_map(LinkedList* this,void*(pFuncion)(void*))
 			}
 			contador ++;
 		}while(contador <= this->size);
-		retorno = 0;
 	}
-	return retorno;
+	return listaConTotales;
 }
 
 /**
@@ -693,8 +695,5 @@ LinkedList* ll_filter (LinkedList* this, int (*pFunc) (void* element))
 			ll_add(listaFiltradaPorTipo, servicio);
 		}
 	}
-
-
-
 	return listaFiltradaPorTipo;
 }

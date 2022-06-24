@@ -38,7 +38,7 @@ int parser_PasajeroDesdeTexto(FILE* pArchivo , LinkedList* listaServicios)
 		if(numeroScanf == 6)
 		{
 
-			pServicio = eServicio_newParametros(id_servicio, descripcion, tipo, precioUnitario, cantidad, totalServicio);
+			pServicio = eServicio_newParametros(id_servicio, descripcion, tipo, precioUnitario, cantidad, totalServicio);//=>servicios.c
 
 			validacionAdd = ll_add(listaServicios,(eServicio*) &pServicio);//(puede necesitar parceo)
 

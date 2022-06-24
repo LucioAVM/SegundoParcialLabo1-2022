@@ -43,6 +43,12 @@ int cargaDeArchivo(char* path, LinkedList* listaServicios);
 void listarServicios(LinkedList* listaServicios);
 
 /**
+ *
+ * @param listaServicios
+ */
+void eServicio_Totales(LinkedList* listaServicios);
+
+/**
  * @brief genera un archivo con los servicios del tipo seleccionado
  *
  * @param listaServicios
