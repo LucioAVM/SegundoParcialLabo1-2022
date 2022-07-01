@@ -52,6 +52,7 @@ eServicio* eServicio_newParametros(char id_servicioStr[], char descripcion[], ch
         {
         	//printf("%s ANTES \n",id_servicioStr);
 
+
         	id_servicio    = atoi(id_servicioStr);
         	tipo           = atoi(tipoStr);
         	precioUnitario = atof(precioUnitarioStr);
@@ -90,13 +91,15 @@ void eServicio_delete(eServicio* this)
 int eServicio_setId(eServicio* this, int id)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && id > 0)
     {
-        this->id_servicio = id;
+        servicio.id_servicio = id;
         retorno = 0;
+        *this = servicio;
     }
     return retorno;
 }
@@ -105,13 +108,13 @@ int eServicio_setId(eServicio* this, int id)
 int eServicio_getId(eServicio* this, int* id)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && id != NULL)
     {
-        *id = this->id_servicio;
-        printf("%d\n\n\n",*id);
+        *id = servicio.id_servicio;
         retorno = 0;
     }
     return retorno;
@@ -124,13 +127,15 @@ int eServicio_getId(eServicio* this, int* id)
 int eServicio_setDescripcion(eServicio* this, char* descripcion)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && descripcion != NULL)
     {
-        strcpy(this->descripcion,descripcion);
+        strcpy(servicio.descripcion,descripcion);
         retorno = 0;
+        *this = servicio;
     }
     return retorno;
 }
@@ -139,12 +144,13 @@ int eServicio_setDescripcion(eServicio* this, char* descripcion)
 int eServicio_getDescripcion(eServicio* this, char* descripcion)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && descripcion != NULL)
     {
-        strcpy(descripcion,this->descripcion);
+        strcpy(descripcion,servicio.descripcion);
         retorno = 0;
     }
     return retorno;
@@ -157,13 +163,15 @@ int eServicio_getDescripcion(eServicio* this, char* descripcion)
 int eServicio_setTipo(eServicio* this, int Tipo)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && Tipo < 4 && Tipo > 0)
     {
-        this->tipo = Tipo;
+        servicio.tipo = Tipo;
         retorno = 0;
+        *this = servicio;
     }
     return retorno;
 }
@@ -171,12 +179,13 @@ int eServicio_getTipo(eServicio* this, char* TipoStr)
 {
     int retorno;
     int tipo;
+    eServicio servicio = *this;
 
     retorno = -1;
 
     if(this != NULL && TipoStr != NULL)
     {
-    	tipo = this->tipo;
+    	tipo = servicio.tipo;
         switch(tipo)
         {
         case 1:
@@ -201,24 +210,27 @@ int eServicio_getTipo(eServicio* this, char* TipoStr)
 int eServicio_setPrecioUnitario(eServicio* this, float precioUnitario)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && precioUnitario < 4 && precioUnitario > 0)
     {
-        this->precioUnitario = precioUnitario;
+        servicio.precioUnitario = precioUnitario;
         retorno = 0;
+        *this = servicio;
     }
     return retorno;
 }
 int eServicio_getPrecioUnitario(eServicio* this, float* precioUnitario)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
     if(this != NULL && precioUnitario != NULL)
     {
-        *precioUnitario = this->precioUnitario;
+        *precioUnitario = servicio.precioUnitario;
         retorno = 0;
     }
     return retorno;
@@ -231,25 +243,28 @@ int eServicio_getPrecioUnitario(eServicio* this, float* precioUnitario)
 int eServicio_setCantidad(eServicio* this, int cantidad)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && cantidad < 4 && cantidad > 0)
     {
-        this->cantidad = cantidad;
+        servicio.cantidad = cantidad;
         retorno = 0;
+        *this = servicio;
     }
     return retorno;
 }
 int eServicio_getCantidad(eServicio* this, int* cantidad)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && cantidad != NULL)
     {
-        *cantidad = this->cantidad;
+        *cantidad = servicio.cantidad;
         retorno = 0;
     }
     return retorno;
@@ -262,25 +277,28 @@ int eServicio_getCantidad(eServicio* this, int* cantidad)
 int eServicio_setTotalServicio(eServicio* this, float totalServicio)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL)
     {
-        this->totalServicio = totalServicio;
+        servicio.totalServicio = totalServicio;
         retorno = 0;
+        *this = servicio;
     }
     return retorno;
 }
 int eServicio_getTotalServicio(eServicio* this, float* totalServicio)
 {
 	int retorno;
+	eServicio servicio = *this;
 
 	retorno = -1;
 
     if(this != NULL && totalServicio != NULL)
     {
-        *totalServicio = this->totalServicio;
+        *totalServicio = servicio.totalServicio;
         retorno = 0;
     }
     return retorno;
@@ -304,6 +322,7 @@ int validacion_gets(eServicio* servicio, int* id_servicio, char descripcion[], c
 				!(eServicio_getCantidad(servicio,cantidad)) &&
 				!(eServicio_getTotalServicio(servicio,totalServicio))))
 		{
+			printf("\n\nPU: %f\n\n", *precioUnitario);
 			retorno = 0;
 		}
 	}
@@ -437,3 +456,69 @@ int filtrarTipo_Exportar(void* element)
 /******************************************************************************************************
 											fin
  ******************************************************************************************************/
+
+
+
+
+int validadorPrecio(eServicio servicio)
+{
+	int retorno;
+
+	retorno = -1;
+
+	if(servicio.totalServicio > 1000)
+	{
+		retorno = 1;
+	}else{
+		retorno = 0;
+	}
+	return retorno;
+}
+
+
+
+int aplicarDescuento(LinkedList* listaServiciosFiltrada)
+{
+	int retorno;
+	float precioTotal;
+	int i;
+	int tam;
+	float precioConDescuento;
+
+	retorno = -1;
+
+	eServicio servicio;
+
+	tam = ll_len(listaServiciosFiltrada);
+
+	for(i = 0 ; i < tam ; i++)
+	{
+		servicio = ll_get(listaServiciosFiltrada, i);
+
+		eServicio_getTotalServicio(servicio,precioTotal);
+
+		precioConDescuento = descuento(10,precioTotal);
+
+		eServicio_setTotalServicio(servicio, precioConDescuento);
+
+		ll_set(listaServiciosFiltrada, i, servicio);
+	}
+	if(i == tam)
+	{
+		retorno = 0;
+	}
+
+	return retorno;
+}
+
+
+float descuento(int PorcentajeDescuento, float precio)
+{
+	float precioConDescuento;
+	float descuentoAplicado;
+
+	descuentoAplicado= precio * PorcentajeDescuento/100;
+	precioConDescuento = precio-descuentoAplicado;
+
+	return precioConDescuento;
+}

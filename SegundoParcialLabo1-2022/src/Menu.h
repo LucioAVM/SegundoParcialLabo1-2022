@@ -23,7 +23,7 @@ int getMenu(void);
  * @param listaServicios
  * @param bandera
  */
-void archivo_servicios(LinkedList* listaServicios,int* bandera);
+int archivo_servicios(LinkedList* listaServicios);
 
 /**
  * @brief abre/cierra el archivo y parsea los datos
@@ -40,35 +40,38 @@ int cargaDeArchivo(char* path, LinkedList* listaServicios);
  *
  * @param listaServicios
  */
-void listarServicios(LinkedList* listaServicios);
+int listarServicios(LinkedList* listaServicios);
 
 /**
  *
  * @param listaServicios
  */
-void eServicio_Totales(LinkedList* listaServicios);
+int eServicio_Totales(LinkedList* listaServicios);
 
 /**
  * @brief genera un archivo con los servicios del tipo seleccionado
  *
  * @param listaServicios
  */
-void ordenar_tipo(LinkedList* listaServicios);
+int ordenar_tipo(LinkedList* listaServicios);
 
 /**
  * @brief muestra un listado de los servicios ordenados por descripcion de manera ascendente
  *
  * @param listaServicios
  */
-void mostrarServiciosAsendente(LinkedList* listaServicios);
+int mostrarServiciosAsendente(LinkedList* listaServicios);
 
 /**
  * @brief guarda los datos en un archivo llamado "servicios-ordenados.csv"
  *
  * @param listaServicios
  */
-void guardarArchivo(LinkedList* listaServicios);
+int guardarArchivo(LinkedList* listaServicios, char path[]);
 
 
+int filtrarPorPrecio(LinkedList* listaServicios);
+
+int CargaArchivoYDescuento()
 
 #endif /* MENU_H_ */

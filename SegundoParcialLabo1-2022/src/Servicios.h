@@ -38,8 +38,7 @@ eServicio* eServicio_new();
  * @param totalServicioStr
  * @return la LL con parametros ya cargados
  */
-eServicio* eServicio_newParametros(char* id_servicioStr, char* descripcion, char* tipoStr, char* precioUnitarioStr, char* cantidadStr, char* totalServicioStr);
-
+eServicio* eServicio_newParametros(char id_servicioStr[], char descripcion[], char tipoStr[], char precioUnitarioStr[], char cantidadStr[], char totalServicioStr[]);
 /**
  * @brief libera el espacio de memoria ocupado por la estructura
  *
@@ -219,6 +218,10 @@ int filtrarTipo_Mayorista(void* element);
  */
 int filtrarTipo_Exportar(void* element);
 
+int validadorPrecio(eServicio servicio);
 
+int aplicarDescuento(LinkedList* listaServiciosFiltrada);
+
+float descuento(int PorcentajeDescuento, float precio);
 
 #endif /* SERVICIOS_H_ */

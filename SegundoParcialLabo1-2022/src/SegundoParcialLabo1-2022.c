@@ -34,7 +34,9 @@ int main(void)
 	setbuf(stdout, NULL);
 
 	int menu;
-	int banderaArchivos;
+	int orden;
+
+	orden = -1;
 
 	menu = 0;
 
@@ -52,36 +54,75 @@ int main(void)
 			switch(menu)
 			{
 			case 1:
-				archivo_servicios(listaServicios, &banderaArchivos);
+				if(!(archivo_servicios(listaServicios)))
+				{
+					printf("se ah cargado el archivo correctamente");
+					orden = 0;
+				}else{
+					printf("error al intentar cargar archivo, intente nuevamente\n");
+				}
+
 				break;
 
 
 			case 2:
-				listarServicios(listaServicios);// validar carga de archivos
+				if(listarServicios(listaServicios) != 0 && orden == 0)
+				{
+					printf("\nPara listar los servicios primero se debe cargar un archivo\n");
+				}
 				break;
 
 
 			case 3:
-				eServicio_Totales(listaServicios);
+				if(eServicio_Totales(listaServicios) != 0 && orden == 0)
+				{
+					printf("\nPara asignar totales a los servicios primero se debe cargar un archivo\n");
+				}
 				break;
 
 
 			case 4:
-				ordenar_tipo(listaServicios);
+				if(ordenar_tipo(listaServicios) != 0 && orden == 0)
+				{
+					printf("\nPara filtrar por tipo los servicios primero se debe cargar un archivo\n");
+				}
+
 				break;
 
 
 			case 5:
-				mostrarServiciosAsendente(listaServicios);
+				if(mostrarServiciosAsendente(listaServicios) != 0 && orden == 0)
+				{
+					printf("\nPara mostrar los servicios primero se debe cargar un archivo\n");
+				}
 				break;
 
 
 			case 6:
-				guardarArchivo(listaServicios);
+				if(!(guardarArchivo(listaServicios,"servicios-ordenados.csv")) && orden == 0)
+				{
+					printf("se guardo existosamente la lista de servicios en ´servicios-ordenados.csv´");
+				}else{
+					printf("\nPara mostrar los servicios primero se debe cargar un archivo\n");
+				}
+
 				break;
 
 
 			case 7:
+				if(filtrarPorPrecio(listaServicios) != 0 && orden != 0)
+				{
+					printf("\nPara mostrar los servicios primero se debe cargar un archivo\n");
+				}
+				break;
+			case 8:
+				if(!(CargaArchivoYDescuento()))
+				{
+					printf("se cargo y aplico el descuento correctamente, ")
+				}
+
+				break;
+			case 9:
 				printf( "\n           GRACIAS POR UTILIZAR ESTE PROGRAMA\n"
 						"             PRODUCIDO POR Monsalbo lucio\n"
 						"              EDITADO POR Lucio Monsalbo\n"
@@ -89,6 +130,9 @@ int main(void)
 						"        TESTEADO POR Valerio Alejandro Monsalbo\n"
 						"        ENVIADO POR Monsalbo Lucio Alejandro Valerio\n"
 						"   AGRADECIMIENTO ESPECIAL A Lucio Alejandro Valerio Monsalbo\n");
+				break;
+			default:
+				printf("ERROR,Ingrese una opcion valida");
 				break;
 			}
 	}while(menu != 7);

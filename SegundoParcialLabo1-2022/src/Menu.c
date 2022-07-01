@@ -50,28 +50,25 @@ int getMenu(void)
 /******************************************************************************************************
 										Opcion 1
  ******************************************************************************************************/
-void archivo_servicios(LinkedList* listaServicios,int* bandera)//hacer una validacion para cuando cargue un archivo por segunda ves
+int archivo_servicios(LinkedList* listaServicios)//hacer una validacion para cuando cargue un archivo por segunda ves
 {
 	char path[20];
-	int validacionCarga;
+	int retorno;
 
-	if(listaServicios != NULL && bandera != NULL)
+	retorno = -1;
+
+	if(listaServicios != NULL)
 	{
 		printf("ingrese el nombre del archivo que desea cargar\n");
 		fflush(stdout);
 		scanf("%s", path);
 
-		validacionCarga = cargaDeArchivo(path, listaServicios);//=> abajo
-
-		if(validacionCarga == 0)
+		if(!(cargaDeArchivo(path, listaServicios)))
 		{
-			*bandera = 1;
-		}else{
-			printf("error al intentar cargar archivo, intente nuevamente\n");
+			retorno = 0;
 		}
-	}else{
-		printf("ERROR, al intentar iniciar la LinkedList\n");
 	}
+	return retorno;
 }
 
 int cargaDeArchivo(char* path, LinkedList* listaServicios)
@@ -101,10 +98,13 @@ int cargaDeArchivo(char* path, LinkedList* listaServicios)
 /******************************************************************************************************
 										Opcion 2
  ******************************************************************************************************/
-void listarServicios(LinkedList* listaServicios)
+int listarServicios(LinkedList* listaServicios)
 {
 	int i;
 	int tam;
+	int retorno;
+
+	retorno = -1;
 
 	if(listaServicios != NULL)
 	{
@@ -117,26 +117,30 @@ void listarServicios(LinkedList* listaServicios)
 		{
 			for(i = 0 ; i < tam ; i++)
 			{
-				if(!mostrarUnServicio(listaServicios, i))
+				printf("\n\ncontador: %d\n\n", i);
+				if(mostrarUnServicio(listaServicios, i) != 0)
 				{
 					printf("error al cargar el servicio en la pocision N° %d\n", i);
 				}
 			}
+			retorno = 0;
 		}
-	}else{
-		printf("ERROR, al intentar iniciar la LinkedList\n");
 	}
+	return retorno;
 }
 
 /******************************************************************************************************
 										Opcion 3
  ******************************************************************************************************/
-void eServicio_Totales(LinkedList* listaServicios)
+int eServicio_Totales(LinkedList* listaServicios)
 {
 	LinkedList* listaConTotales = NULL;
 
 	int i;
 	int tam;
+	int retorno;
+
+	retorno = -1;
 
 	void*(*pFuncion)(void*);
 
@@ -159,14 +163,19 @@ void eServicio_Totales(LinkedList* listaServicios)
 			{
 				mostrarUnServicio(listaConTotales,i);
 			}
+			if(i == tam)
+			{
+				retorno = 0;
+			}
 		}
 	}
+	return retorno;
 }
 
 /******************************************************************************************************
 										Opcion 4
  ******************************************************************************************************/
-void ordenar_tipo(LinkedList* listaServicios)
+int ordenar_tipo(LinkedList* listaServicios)
 {
 	int submenu;
 	int tam;
@@ -178,6 +187,9 @@ void ordenar_tipo(LinkedList* listaServicios)
 	float precioUnitario;
 	int cantidad;
 	float totalServicio;
+	int retorno;
+
+	retorno = -1;
 
 	eServicio* servicio;
 
@@ -213,24 +225,25 @@ void ordenar_tipo(LinkedList* listaServicios)
 			{
 			case 1:
 				pFuncion = filtrarTipo_Minorista;
-				listaFiltradaPorTipo = ll_filter (listaServicios, pFuncion);
 				break;
 			case 2:
 				pFuncion = filtrarTipo_Mayorista;
-				listaFiltradaPorTipo = ll_filter (listaServicios, pFuncion);
 				break;
 			case 3:
 				pFuncion = filtrarTipo_Exportar;
-				listaFiltradaPorTipo = ll_filter (listaServicios, pFuncion);
 				break;
 			}
+
+			listaFiltradaPorTipo = ll_filter (listaServicios, pFuncion);
 
 			tam = ll_len(listaFiltradaPorTipo);
 
 			do{
 				servicio = ll_get(listaFiltradaPorTipo, contador);
 
-				if(!(validacion_gets(servicio, &id_servicio, descripcion, tipo, &precioUnitario, &cantidad, &totalServicio)))
+				//preguntar si esta bien esto
+				//logica: primero valida servicio y despues entra a funcion
+				if(servicio != NULL && !(validacion_gets(servicio, &id_servicio, descripcion, tipo, &precioUnitario, &cantidad, &totalServicio)))
 				{
 					fprintf(pArchivo,"%d,%s,%s,%2.f,%d,%2.f\n",id_servicio,descripcion,tipo,precioUnitario,cantidad,totalServicio);
 				}
@@ -238,19 +251,24 @@ void ordenar_tipo(LinkedList* listaServicios)
 				contador++;
 			}while(contador <= tam);
 
+			if(contador == tam)
+			{
+				retorno = 0;
+			}
 			fclose(pArchivo);
 		}
-	}else{
-		printf("ERROR, Lista de servicios no encontrada");
 	}
+	return retorno;
 }
 
 /******************************************************************************************************
 										Opcion 5
  ******************************************************************************************************/
-void mostrarServiciosAsendente(LinkedList* listaServicios)
+int mostrarServiciosAsendente(LinkedList* listaServicios)
 {
-	int validacion;
+	int retorno;
+
+	retorno = -1;
 
 	int (*pfuncion)(void*,void*);
 
@@ -258,30 +276,32 @@ void mostrarServiciosAsendente(LinkedList* listaServicios)
 	{
 		pfuncion = ordenarServicio;
 
-		validacion = ll_sort(listaServicios,pfuncion, 1);
-
-		if(validacion == -1)
+		if(!(ll_sort(listaServicios,pfuncion, 1)))
 		{
-			printf("ERROR, Lista de servicios no encontrada");//el puntero de la lista es NULL
+			retorno = 0;
 		}
 	}
+	return retorno;
 }
 
 /******************************************************************************************************
 										Opcion 6
  ******************************************************************************************************/
-void guardarArchivo(LinkedList* listaServicios)
+int guardarArchivo(LinkedList* listaServicios, char path[])
 {
 	FILE* pArchivoTexto;
 	eServicio* servicio;
 	int tam;
 	int i;
+	int retorno;
+
+	retorno = -1;
 
 	tam = ll_len(listaServicios);
 
-	if(listaServicios !=NULL)
+	if(listaServicios !=NULL)//"servicios-ordenados.csv"
 	{
-		pArchivoTexto = fopen("servicios-ordenados.csv","w");
+		pArchivoTexto = fopen(path,"w");
 
 		if(pArchivoTexto !=NULL)
 		{
@@ -290,9 +310,76 @@ void guardarArchivo(LinkedList* listaServicios)
 				servicio = (eServicio*)ll_get(listaServicios,i);
 				fwrite(servicio,sizeof(servicio),1,pArchivoTexto);
 			}
+			if(i == tam)
+			{
+				retorno = 0;
+			}
 		}
 		fclose(pArchivoTexto);
-		printf("se guardo existosamente la lista de servicios en ´servicios-ordenados.csv´");
 	}
-	printf("lista de servicios inexistente");
+	return retorno;
+}
+
+
+int filtrarPorPrecio(LinkedList* listaServicios)
+{
+	int retorno;
+	int tam;
+	int i;
+	int validacion;
+
+	LinkedList* LL_Aux;
+
+	retorno = -1;
+
+	int (*pFunc)(void*);
+
+	if(listaServicios != NULL)
+	{
+		pFunc = validadorPrecio;
+
+		LL_Aux = ll_filter(listaServicios,pFunc, 1);
+
+		printf("Listado de Servicios que superan los $1000 en valor total:\n"
+				"ID-------Descripcion-------Tipo-------Precio Unitario-------Cantidad-------Total\n");
+
+		tam = ll_len(LL_Aux);
+
+		for(i = 0 ; i < tam ; i++)
+		{
+			mostrarUnServicio(LL_Aux,i);
+		}
+		validacion = guardarArchivo(LL_Aux,"FiltradoPorPrecio.csv");
+		if(validacion == -1)
+		{
+			printf("\nError, al guardar la lita filtrada en un nuevo documento\n");
+		}else{
+			retorno = 0;
+		}
+	}
+	return retorno;
+}
+
+
+
+int CargaArchivoYDescuento()
+{
+	int retorno;
+	int validacion;
+	LinkedList* listaServiciosFiltrada = ll_newLinkedList();
+
+	retorno = -1;
+
+	if(listaServiciosFiltrada != NULL)
+	{
+		archivo_servicio(listaServiciosFiltrada);
+
+		validacion = aplicarDescuento(listaServiciosFiltrada);
+		if(validacion == 0)
+		{
+			retorno = 0;
+		}
+	}
+
+	return retorno;
 }
