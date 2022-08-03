@@ -54,14 +54,13 @@ int main(void)
 			switch(menu)
 			{
 			case 1:
-				if(!(archivo_servicios(listaServicios)))
+				if(!(archivo_servicios(listaServicios, "data.csv")))
 				{
-					printf("se ah cargado el archivo correctamente");
+					printf("se ah cargado el archivo correctamente\n");
 					orden = 0;
 				}else{
 					printf("error al intentar cargar archivo, intente nuevamente\n");
 				}
-
 				break;
 
 
@@ -110,17 +109,17 @@ int main(void)
 
 
 			case 7:
-				if(filtrarPorPrecio(listaServicios) != 0 && orden != 0)
+				/*if(filtrarPorPrecio(listaServicios) != 0 && orden != 0)
 				{
 					printf("\nPara mostrar los servicios primero se debe cargar un archivo\n");
-				}
+				}*/
 				break;
 			case 8:
-				if(!(CargaArchivoYDescuento()))
+				/*if(!(CargaArchivoYDescuento()))
 				{
-					printf("se cargo y aplico el descuento correctamente, ")
+					printf("se cargo y aplico el descuento correctamente, ");
 				}
-
+*/
 				break;
 			case 9:
 				printf( "\n           GRACIAS POR UTILIZAR ESTE PROGRAMA\n"

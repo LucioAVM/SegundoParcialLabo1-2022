@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Menu.h"
+#include "Servicios.h"
+#include "Parcer.h"
 #include "LinkedList.h"
 
 /******************************************************************************************************
@@ -48,14 +50,19 @@ int getMenu(void)
 /******************************************************************************************************
 										Opcion 1
  ******************************************************************************************************/
-int archivo_servicios(LinkedList* listaServicios,char* path)//hacer una validacion para cuando cargue un archivo por segunda ves
+int archivo_servicios(LinkedList* listaServicios)//hacer una validacion para cuando cargue un archivo por segunda ves
 {
+	char path[20];
 	int retorno;
 
 	retorno = -1;
 
 	if(listaServicios != NULL)
 	{
+		printf("ingrese el nombre del archivo que desea cargar\n");
+		fflush(stdout);
+		scanf("%s", path);
+
 		if(!(cargaDeArchivo(path, listaServicios)))
 		{
 			retorno = 0;
@@ -80,7 +87,8 @@ int cargaDeArchivo(char* path, LinkedList* listaServicios)
 		{
 			printf("error");
 		}else{
-			retorno = parser_PasajeroDesdeTexto(pArchivo, listaServicios);
+			parser_PasajeroDesdeTexto(pArchivo, listaServicios);//=>parser.c
+			retorno = 0;
 		}
 		fclose(pArchivo);
 	}
@@ -128,6 +136,8 @@ int eServicio_Totales(LinkedList* listaServicios)
 {
 	LinkedList* listaConTotales = NULL;
 
+	int i;
+	int tam;
 	int retorno;
 
 	retorno = -1;
@@ -138,17 +148,25 @@ int eServicio_Totales(LinkedList* listaServicios)
 	{
 		pFuncion = asignarTotales;
 
-
-
 		listaConTotales = ll_map(listaServicios,pFuncion);
-
-
 
 		if(listaConTotales != NULL)
 		{
 			printf("se cargo con exito la siguiente lista:\n");
 
-			listarServicios(listaConTotales);
+			printf("Listado de Servicios:\n"
+					"ID-------Descripcion-------Tipo-------Precio Unitario-------Cantidad-------Total\n");
+
+			tam = ll_len(listaConTotales);
+
+			for(i = 0 ; i < tam ; i++)
+			{
+				mostrarUnServicio(listaConTotales,i);
+			}
+			if(i == tam)
+			{
+				retorno = 0;
+			}
 		}
 	}
 	return retorno;
@@ -269,7 +287,7 @@ int mostrarServiciosAsendente(LinkedList* listaServicios)
 /******************************************************************************************************
 										Opcion 6
  ******************************************************************************************************/
-int guardarArchivo(LinkedList* listaServicios, char path[])
+int guardarArchivo(LinkedList* listaServicios)
 {
 	FILE* pArchivoTexto;
 	eServicio* servicio;
@@ -281,9 +299,9 @@ int guardarArchivo(LinkedList* listaServicios, char path[])
 
 	tam = ll_len(listaServicios);
 
-	if(listaServicios !=NULL)//"servicios-ordenados.csv"
+	if(listaServicios !=NULL)
 	{
-		pArchivoTexto = fopen(path,"w");
+		pArchivoTexto = fopen("servicios-ordenados.csv","w");
 
 		if(pArchivoTexto !=NULL)
 		{
@@ -301,69 +319,3 @@ int guardarArchivo(LinkedList* listaServicios, char path[])
 	}
 	return retorno;
 }
-
-
-/*
-int filtrarPorPrecio(LinkedList* listaServicios)
-{
-	int retorno;
-	int tam;
-	int i;
-	int validacion;
-
-	LinkedList* LL_Aux = NULL;
-
-	retorno = -1;
-
-	int (*pFunc)(void*);
-
-	if(listaServicios != NULL)
-	{
-		pFunc = validadorPrecio;
-
-		LL_Aux = ll_filter(listaServicios,pFunc, 1);
-
-		printf("Listado de Servicios que superan los $1000 en valor total:\n"
-				"ID-------Descripcion-------Tipo-------Precio Unitario-------Cantidad-------Total\n");
-
-		tam = ll_len(LL_Aux);
-
-		for(i = 0 ; i < tam ; i++)
-		{
-			mostrarUnServicio(LL_Aux,i);
-		}
-		validacion = guardarArchivo(LL_Aux,"FiltradoPorPrecio.csv");
-		if(validacion == -1)
-		{
-			printf("\nError, al guardar la lita filtrada en un nuevo documento\n");
-		}else{
-			retorno = 0;
-		}
-	}
-	return retorno;
-}
-
-
-
-int CargaArchivoYDescuento()
-{
-	int retorno;
-	int validacion;
-	LinkedList* listaServiciosFiltrada = ll_newLinkedList();
-
-	retorno = -1;
-
-	if(listaServiciosFiltrada != NULL)
-	{
-		archivo_servicio(listaServiciosFiltrada);
-
-		validacion = aplicarDescuento(listaServiciosFiltrada);
-		if(validacion == 0)
-		{
-			retorno = 0;
-		}
-	}
-
-	return retorno;
-}
-*/

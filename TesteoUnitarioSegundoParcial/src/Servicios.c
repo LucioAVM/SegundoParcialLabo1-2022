@@ -50,12 +50,16 @@ eServicio* eServicio_newParametros(char id_servicioStr[], char descripcion[], ch
 
         if(pServicio != NULL)
         {
+        	//printf("%s ANTES \n",id_servicioStr);
+
 
         	id_servicio    = atoi(id_servicioStr);
         	tipo           = atoi(tipoStr);
         	precioUnitario = atof(precioUnitarioStr);
         	cantidad       = atoi(cantidadStr);
         	totalServicio  = atoi(totalServicioStr);
+
+        	//printf("%d DESPUES\n",id_servicio);
 
             eServicio_setId(pServicio,id_servicio);
             eServicio_setDescripcion(pServicio,descripcion);
@@ -210,7 +214,7 @@ int eServicio_setPrecioUnitario(eServicio* this, float precioUnitario)
 
 	retorno = -1;
 
-    if(this != NULL && precioUnitario > 0)
+    if(this != NULL && precioUnitario < 4 && precioUnitario > 0)
     {
         servicio.precioUnitario = precioUnitario;
         retorno = 0;
@@ -243,7 +247,7 @@ int eServicio_setCantidad(eServicio* this, int cantidad)
 
 	retorno = -1;
 
-    if(this != NULL && cantidad > 0)
+    if(this != NULL && cantidad < 4 && cantidad > 0)
     {
         servicio.cantidad = cantidad;
         retorno = 0;
@@ -272,8 +276,10 @@ int eServicio_getCantidad(eServicio* this, int* cantidad)
 
 int eServicio_setTotalServicio(eServicio* this, float totalServicio)
 {
-	int retorno = -1;
+	int retorno;
 	eServicio servicio = *this;
+
+	retorno = -1;
 
     if(this != NULL)
     {
@@ -342,8 +348,6 @@ void* asignarTotales(void* pElement)
 
 	total = cantidad * precioUnitario;
 
-	printf("%.2f",total);
-
 	eServicio_setTotalServicio(servicio, total);
 
 	return servicio;
@@ -367,11 +371,11 @@ int mostrarUnServicio(LinkedList* listaServicios, int index)
 
 	retorno = -1;
 
-	servicio = ll_get(listaServicios, index);
+	servicio =(eServicio*) ll_get(listaServicios, index);
 
 	if(!(validacion_gets(servicio, &id_servicio, descripcion, tipo, &precioUnitario, &cantidad, &totalServicio)))
 	{
-		printf("%d      %s      %s      %.2f       %d        %.2f\n", id_servicio, descripcion, tipo, precioUnitario, cantidad, totalServicio);
+		printf("%d      %s      %s      %f.2       %d        %f.2\n", id_servicio, descripcion, tipo, precioUnitario, cantidad, totalServicio);
 
 		retorno = 0;
 	}
@@ -454,67 +458,37 @@ int filtrarTipo_Exportar(void* element)
  ******************************************************************************************************/
 
 
-
-
-int validadorPrecio(eServicio servicio)
+void HardcodeoServicios(LinkedList* listaServicios)
 {
-	int retorno;
-
-	retorno = -1;
-
-	if(servicio.totalServicio > 1000)
-	{
-		retorno = 1;
-	}else{
-		retorno = 0;
-	}
-	return retorno;
-}
-
-
-/*
-int aplicarDescuento(LinkedList* listaServiciosFiltrada)
-{
-	int retorno;
-	float precioTotal;
 	int i;
-	int tam;
-	float precioConDescuento;
+	eServicio aux;
 
-	retorno = -1;
+	eServicio servicio[] = {
+			{
+					1, "ropa",1,
+					19.45,10, 0
+			},
+			{
+					2, "medias",3,
+					5.89,4, 0
+			},
+			{
+					3, "camisa",2,
+					28.89,25, 0
+			},
+			{
+					4, "milanesa",1,
+					101.01,8, 0
+			},
+			{
+					5, "sueño",2,
+					101.01,28, 0
+			}
+	};
 
-	eServicio* servicio;
-
-	tam = ll_len(listaServiciosFiltrada);
-
-	for(i = 0 ; i < tam ; i++)
+	for(i = 0 ; i < 5 ; i++)
 	{
-		servicio = ll_get(listaServiciosFiltrada, i);
-
-		eServicio_getTotalServicio(servicio,precioTotal);
-
-		precioConDescuento = descuento(10,precioTotal);
-
-		eServicio_setTotalServicio(servicio, precioConDescuento);
-
-		ll_set(listaServiciosFiltrada, i, servicio);
+		aux = servicio[i];
+		ll_add(listaServicios,&aux);
 	}
-	if(i == tam)
-	{
-		retorno = 0;
-	}
-
-	return retorno;
-}
-*/
-
-float descuento(int PorcentajeDescuento, float precio)
-{
-	float precioConDescuento;
-	float descuentoAplicado;
-
-	descuentoAplicado= precio * PorcentajeDescuento/100;
-	precioConDescuento = precio-descuentoAplicado;
-
-	return precioConDescuento;
 }

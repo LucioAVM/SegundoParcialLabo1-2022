@@ -636,29 +636,37 @@ int ll_sort(LinkedList* this, int (pFunc)(void* ,void*), int order)
  * @param pFuncion
  * @return LL con totales de servicios ya cargados
  */
-LinkedList* ll_map(LinkedList* this,void* (pFuncion)(void*))
+LinkedList* ll_map(LinkedList* this,void*(pFuncion)(void*))
 {
-	LinkedList* pLista = ll_newLinkedList();
-	int tam;
-	void* pElement = NULL;
+	LinkedList* listaConTotales = ll_newLinkedList();
+
+	eServicio* servicio = NULL;
+	eServicio* auxiliarServicio = NULL;
+
+	int contador;
 	int validacion;
-	if(pLista != NULL && ll_isEmpty(this) == 0)
+
+	contador = 0;
+
+	if(this != NULL)
 	{
-		tam = ll_len(this);
-		for(int i = 0 ; i < tam ; i++)
+		do
 		{
-			pElement = ll_get(this, i);
-			if(pElement != NULL)
+			servicio =(eServicio*) ll_get( this, contador);
+
+			auxiliarServicio  = pFuncion(servicio);
+
+			validacion = ll_add(listaConTotales, auxiliarServicio);
+
+			if(validacion != 0)
 			{
-				validacion =(int) pFuncion(pElement);
-				if(validacion == 1)
-				{
-					ll_add(pLista, pElement);
-				}
+				printf("ocurrio un error al modificar el siguiente servicio:");
+				mostrarUnServicio(this, contador);
 			}
-		}
+			contador ++;
+		}while(contador <= this->size);
 	}
-	return pLista;
+	return listaConTotales;
 }
 
 /**

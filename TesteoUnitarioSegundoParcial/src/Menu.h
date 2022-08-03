@@ -9,8 +9,6 @@
 #define MENU_H_
 
 #include "LinkedList.h"
-#include "Servicios.h"
-#include "Parcer.h"
 
 /**
  * @brief muestra el menu
@@ -25,7 +23,7 @@ int getMenu(void);
  * @param listaServicios
  * @param bandera
  */
-int archivo_servicios(LinkedList* listaServicios,char* path);
+int archivo_servicios(LinkedList* listaServicios);
 
 /**
  * @brief abre/cierra el archivo y parsea los datos
@@ -69,11 +67,8 @@ int mostrarServiciosAsendente(LinkedList* listaServicios);
  *
  * @param listaServicios
  */
-int guardarArchivo(LinkedList* listaServicios, char path[]);
+int guardarArchivo(LinkedList* listaServicios);
 
 
-int filtrarPorPrecio(LinkedList* listaServicios);
-
-int CargaArchivoYDescuento();
 
 #endif /* MENU_H_ */
