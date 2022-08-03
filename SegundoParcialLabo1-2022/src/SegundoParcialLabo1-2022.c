@@ -93,6 +93,8 @@ int main(void)
 				if(mostrarServiciosAsendente(listaServicios) != 0 && orden == 0)
 				{
 					printf("\nPara mostrar los servicios primero se debe cargar un archivo\n");
+				}else{
+					printf("servicios ordenados correctamente\n");
 				}
 				break;
 
@@ -109,32 +111,25 @@ int main(void)
 
 
 			case 7:
-				/*if(filtrarPorPrecio(listaServicios) != 0 && orden != 0)
+				if(menu_TotalCantidades(listaServicios) == -1 && orden == 0 )
 				{
 					printf("\nPara mostrar los servicios primero se debe cargar un archivo\n");
-				}*/
+				}
 				break;
 			case 8:
-				/*if(!(CargaArchivoYDescuento()))
-				{
-					printf("se cargo y aplico el descuento correctamente, ");
-				}
-*/
-				break;
-			case 9:
 				printf( "\n           GRACIAS POR UTILIZAR ESTE PROGRAMA\n"
-						"             PRODUCIDO POR Monsalbo lucio\n"
-						"              EDITADO POR Lucio Monsalbo\n"
-						"         BUILDEADO POR Alejandro Lucio Monsalbo\n"
-						"        TESTEADO POR Valerio Alejandro Monsalbo\n"
-						"        ENVIADO POR Monsalbo Lucio Alejandro Valerio\n"
-						"   AGRADECIMIENTO ESPECIAL A Lucio Alejandro Valerio Monsalbo\n");
+										"             PRODUCIDO POR Monsalbo lucio\n"
+										"              EDITADO POR Lucio Monsalbo\n"
+										"         BUILDEADO POR Alejandro Lucio Monsalbo\n"
+										"        TESTEADO POR Valerio Alejandro Monsalbo\n"
+										"        ENVIADO POR Monsalbo Lucio Alejandro Valerio\n"
+										"   AGRADECIMIENTO ESPECIAL A Lucio Alejandro Valerio Monsalbo\n");
 				break;
 			default:
 				printf("ERROR,Ingrese una opcion valida");
 				break;
 			}
-	}while(menu != 7);
+	}while(menu != 8);
 
 	return EXIT_SUCCESS;
 }

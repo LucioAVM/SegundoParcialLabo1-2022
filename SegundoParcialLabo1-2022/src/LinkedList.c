@@ -375,27 +375,19 @@ int ll_indexOf(LinkedList* this, void* pElement)
 int ll_isEmpty(LinkedList* this)
 {
 	int retorno;
-	int i;
-	int tam;
 
 	retorno = -1;
 
 	if(this != NULL)
 	{
-		tam = ll_len(this);
-
-		for(i=0; i<tam; i++)
-		{
-
-			if((ll_get(this, i)) == NULL)
-			{
-				retorno = 0;
-				break;
-			}
-		}
-		if(i == tam && retorno == -1)
+		if(this->size == 0)
 		{
 			retorno = 1;
+		}else{
+			if(this->size > 0)
+			{
+				retorno = 0;
+			}
 		}
 	}
 	return retorno;
@@ -575,56 +567,40 @@ LinkedList* ll_clone(LinkedList* this)
                                 ( 0) Si ok
  */
 
-int ll_sort(LinkedList* this, int (pFunc)(void* ,void*), int order)
+int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
 {
 	int retorno = -1;
 
-	void* pElement1;
-	void* pElement2;
-	void* aux;
-
-	int verificacion;
+	void* pElement1 = NULL;
+	void* pElement2 = NULL;
+	void* aux = NULL;
 
 	int i;
 	int j;
 
 	int len;
 
-	if(this != NULL && pFunc != NULL && order >= 0 && order <= 1)
+	if(this != NULL && pFunc != NULL && (order == 0 || order == 1))//validacion parametros
 	{
-		len = ll_len(this);
+		len = ll_len(this);//tam de LL
 
-		for(i = 0; i < len-1 ; i++)
+		for(i = 0; i < len ; i++)//primer for -- buclea la LL hasta tam
 		{
-			for(j=i+1; j<len; j++)
+			for(j=i+1; j<len; j++)// buclea toda la lista desde el anterior+1 hasta tam
 			{
 				pElement1 = ll_get(this, i);
 				pElement2 = ll_get(this, j);
-				verificacion = pFunc(pElement1, pElement2);
-				if(verificacion > 0 && order == 1)
-				{
-					aux = pElement1;
-					pElement1 = pElement2;
-					pElement2 = aux;
 
-					ll_set(this, i, pElement1);
-					ll_set(this, j, pElement2);
-				}
-				else
-				{
-					if(verificacion < 0 && order == 0)
-					{
-						aux = pElement2;
-						pElement2 = pElement1;
-						pElement1 = aux;
+				aux = pElement1;//guardo el E1 en aux
 
-						ll_set(this, i, pElement1);
-						ll_set(this, j, pElement2);
-					}
+				if((order == 1 && pFunc(pElement1, pElement2) > 0) || (order == 0 && pFunc(pElement1, pElement2) < 0))
+				{
+					ll_set(this, i, pElement2);
+					ll_set(this, j, aux);
+					retorno = 0;
 				}
 			}
 		}
-		retorno = 0;
 	}
 	return retorno;
 }
@@ -641,7 +617,7 @@ LinkedList* ll_map(LinkedList* this,void* (pFuncion)(void*))
 	LinkedList* pLista = ll_newLinkedList();
 	int tam;
 	void* pElement = NULL;
-	int validacion;
+
 	if(pLista != NULL && ll_isEmpty(this) == 0)
 	{
 		tam = ll_len(this);
@@ -650,11 +626,8 @@ LinkedList* ll_map(LinkedList* this,void* (pFuncion)(void*))
 			pElement = ll_get(this, i);
 			if(pElement != NULL)
 			{
-				validacion =(int) pFuncion(pElement);
-				if(validacion == 1)
-				{
-					ll_add(pLista, pElement);
-				}
+				pElement = pFuncion(pElement);
+				ll_add(pLista, pElement);
 			}
 		}
 	}
@@ -678,9 +651,9 @@ LinkedList* ll_filter (LinkedList* this, int (*pFunc) (void* element))
 
 	tam = ll_len(this);
 
-	for(i = 0 ; i <= tam ; i++)
+	for(i = 0 ; i < tam ; i++)
 	{
-		servicio = (eServicio*) ll_get(this, i);
+		servicio = ll_get(this, i);
 
 		if(pFunc(servicio) == 1)
 		{

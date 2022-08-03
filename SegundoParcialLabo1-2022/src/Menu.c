@@ -34,7 +34,8 @@ int getMenu(void)
 				"4- Filtrar por tipos\n"
 				"5- Mostrar Servicios\n"
 				"6- Guardar Servicios\n"
-				"7- Salir\n");
+				"7- Total De cantidades\n"
+				"8- Salir\n");
 
 		fflush(stdout);
 		scanf("%d", &menu);
@@ -109,7 +110,6 @@ int listarServicios(LinkedList* listaServicios)
 		{
 			for(i = 0 ; i < tam ; i++)
 			{
-				printf("\n\ncontador: %d\n\n", i);
 				if(mostrarUnServicio(listaServicios, i) != 0)
 				{
 					printf("error al cargar el servicio en la pocision N° %d\n", i);
@@ -138,17 +138,18 @@ int eServicio_Totales(LinkedList* listaServicios)
 	{
 		pFuncion = asignarTotales;
 
-
-
 		listaConTotales = ll_map(listaServicios,pFuncion);
-
-
+		int tam = ll_len(listaConTotales);
+		printf("%d", tam);
 
 		if(listaConTotales != NULL)
 		{
-			printf("se cargo con exito la siguiente lista:\n");
-
-			listarServicios(listaConTotales);
+			if(listarServicios(listaConTotales) == 0)
+			{
+				printf("ok");
+				retorno = 0;
+			}
+			ll_deleteLinkedList(listaConTotales);
 		}
 	}
 	return retorno;
@@ -163,17 +164,9 @@ int ordenar_tipo(LinkedList* listaServicios)
 	int tam;
 	int contador;
 
-	int id_servicio;
-	char descripcion[25];
-	char tipo[15];
-	float precioUnitario;
-	int cantidad;
-	float totalServicio;
 	int retorno;
 
 	retorno = -1;
-
-	eServicio* servicio;
 
 	LinkedList* listaFiltradaPorTipo;
 
@@ -195,7 +188,7 @@ int ordenar_tipo(LinkedList* listaServicios)
 			fflush(stdout);
 			scanf("%d", &submenu);
 
-		}while(submenu < 1 && submenu > 4);
+		}while(submenu <= 1 && submenu >= 4);
 
 		if(submenu != 4)
 		{
@@ -215,29 +208,20 @@ int ordenar_tipo(LinkedList* listaServicios)
 				pFuncion = filtrarTipo_Exportar;
 				break;
 			}
-
 			listaFiltradaPorTipo = ll_filter (listaServicios, pFuncion);
+
+			printf("hola");
 
 			tam = ll_len(listaFiltradaPorTipo);
 
-			do{
-				servicio = ll_get(listaFiltradaPorTipo, contador);
-
-				//preguntar si esta bien esto
-				//logica: primero valida servicio y despues entra a funcion
-				if(servicio != NULL && !(validacion_gets(servicio, &id_servicio, descripcion, tipo, &precioUnitario, &cantidad, &totalServicio)))
-				{
-					fprintf(pArchivo,"%d,%s,%s,%2.f,%d,%2.f\n",id_servicio,descripcion,tipo,precioUnitario,cantidad,totalServicio);
-				}
-
-				contador++;
-			}while(contador <= tam);
+			listarServicios(listaFiltradaPorTipo);
 
 			if(contador == tam)
 			{
 				retorno = 0;
 			}
 			fclose(pArchivo);
+			ll_deleteLinkedList(listaFiltradaPorTipo);
 		}
 	}
 	return retorno;
@@ -249,19 +233,20 @@ int ordenar_tipo(LinkedList* listaServicios)
 int mostrarServiciosAsendente(LinkedList* listaServicios)
 {
 	int retorno;
+	int tam;
 
 	retorno = -1;
 
-	int (*pfuncion)(void*,void*);
-
 	if(listaServicios != NULL)
 	{
-		pfuncion = ordenarServicio;
+		retorno = ll_sort(listaServicios,ordenarServicio, 1);
 
-		if(!(ll_sort(listaServicios,pfuncion, 1)))
+		tam = ll_len(listaServicios);
+		for(int i = 0; i < tam ; i++)
 		{
-			retorno = 0;
+			mostrarUnServicio(listaServicios, i);
 		}
+
 	}
 	return retorno;
 }
@@ -367,3 +352,44 @@ int CargaArchivoYDescuento()
 	return retorno;
 }
 */
+
+int promedio(LinkedList* listaMain)
+{
+	int retorno = -1;
+	int tam;
+	eServicio* servicio = NULL;
+	int cantidad;
+	int i;
+
+	int acumulador = 0;
+	int total;
+
+	tam = ll_len(listaMain);
+
+	for(i = 0; i < tam; i++)
+	{
+		servicio = ll_get(listaMain, i);
+
+		if(eServicio_getCantidad(servicio, &cantidad) == 0)
+		{
+			acumulador = acumulador + cantidad;
+		}
+	}
+	total = acumulador / i;
+
+	printf("el promedio del total(%d) de las cantidades es: %d", acumulador,total);
+	retorno = 0;
+
+	return retorno;
+}
+
+int menu_TotalCantidades(LinkedList* listaMain)
+{
+	int retorno = -1;
+
+	if(ll_isEmpty(listaMain) == 0)
+	{
+		retorno = promedio(listaMain);
+	}
+	return retorno;
+}

@@ -266,6 +266,19 @@ int eServicio_getCantidad(eServicio* this, int* cantidad)
     return retorno;
 }
 
+int eServicio_GetCantidad(eServicio* servicio,int* id)
+{
+	int retorno = -1;
+
+	if(id != NULL && servicio != NULL)
+	{
+		*id = servicio->cantidad;
+		retorno = 0;
+	}
+
+	return retorno;
+}
+
 /******************************************************************************************************
 										TotalServicio
  ******************************************************************************************************/
@@ -316,7 +329,6 @@ int validacion_gets(eServicio* servicio, int* id_servicio, char descripcion[], c
 				!(eServicio_getCantidad(servicio,cantidad)) &&
 				!(eServicio_getTotalServicio(servicio,totalServicio))))
 		{
-			printf("\n\nPU: %f\n\n", *precioUnitario);
 			retorno = 0;
 		}
 	}
@@ -341,8 +353,6 @@ void* asignarTotales(void* pElement)
 	eServicio_getPrecioUnitario(servicio,&precioUnitario);
 
 	total = cantidad * precioUnitario;
-
-	printf("%.2f",total);
 
 	eServicio_setTotalServicio(servicio, total);
 
@@ -390,7 +400,8 @@ int ordenarServicio(void* pElement1, void* pElement2)
 
 	retorno = 0;//no hace nada en ll_sort
 
-	if(!(eServicio_getDescripcion(pElement1,descripcion_1)) && !(eServicio_getDescripcion(pElement2,descripcion_2)))
+	if(eServicio_getDescripcion(pElement1,descripcion_1) == 0
+			&& eServicio_getDescripcion(pElement2,descripcion_2) == 0)
 	{
 		retorno = strcmp(descripcion_1,descripcion_2);
 	}
@@ -412,6 +423,8 @@ int filtrarTipo_Minorista(void* element)
 	if(servicio->tipo == 1)
 	{
 		retorno = 1;
+	}else{
+		retorno = 0;
 	}
 
 	return retorno;
@@ -429,6 +442,8 @@ int filtrarTipo_Mayorista(void* element)
 	if(servicio->tipo == 2)
 	{
 		retorno = 1;
+	}else{
+		retorno = 0;
 	}
 
 	return retorno;
@@ -445,6 +460,8 @@ int filtrarTipo_Exportar(void* element)
 	if(servicio->tipo == 3)
 	{
 		retorno = 1;
+	}else{
+		retorno = 0;
 	}
 
 	return retorno;

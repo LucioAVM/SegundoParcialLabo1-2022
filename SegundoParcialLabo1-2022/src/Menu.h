@@ -76,4 +76,8 @@ int filtrarPorPrecio(LinkedList* listaServicios);
 
 int CargaArchivoYDescuento();
 
+int promedio(LinkedList* listaMain);
+
+int menu_TotalCantidades(LinkedList* listaMain);
+
 #endif /* MENU_H_ */
